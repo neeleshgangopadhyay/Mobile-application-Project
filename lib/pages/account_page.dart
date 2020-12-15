@@ -183,7 +183,8 @@ class SecondRoute extends StatelessWidget{
         appBar: AppBar(
           title: Text("UPDATE PROFILE PAGE"),
         ),
-        body: Center(
+        body:
+        SingleChildScrollView(child: Center(
           child: Column(
             children: <Widget>[
 
@@ -270,7 +271,9 @@ class SecondRoute extends StatelessWidget{
 
             ],
           ),
-        ));
+        )
+    ),
+    );
   }
 
 
