@@ -38,7 +38,8 @@ class _InputPageState extends State<InputPage> {
 
       body:
 
-      Column(children: <Widget>[
+
+          Column(children: <Widget>[
         Image.asset('assets/teacher.jpg'),
         SizedBox(height: 15.0),
 
@@ -73,9 +74,9 @@ class _InputPageState extends State<InputPage> {
               TableRow(children: [
                 Text(
                   "NAME",
-                  textScaleFactor: 1.5,
+                  textScaleFactor: 1.0,
                 ),
-                Text("", textScaleFactor: 1.5),
+                Text("", textScaleFactor: 1.0),
 
               ]),
               TableRow(children: [
@@ -89,9 +90,9 @@ class _InputPageState extends State<InputPage> {
               TableRow(children: [
                 Text(
                   "EMAIL ID",
-                  textScaleFactor: 1.5,
+                  textScaleFactor: 1.0,
                 ),
-                Text("", textScaleFactor: 1.5),
+                Text("", textScaleFactor: 1.0),
 
               ]),
               TableRow(children: [
@@ -103,8 +104,8 @@ class _InputPageState extends State<InputPage> {
 
               ]),
               TableRow(children: [
-                Text("SEMESTER", textScaleFactor: 1.5),
-                Text("", textScaleFactor: 1.5),
+                Text("SEMESTER", textScaleFactor: 1.0),
+                Text("", textScaleFactor: 1.0),
 
               ]),
               TableRow(children: [
@@ -116,8 +117,8 @@ class _InputPageState extends State<InputPage> {
 
               ]),
               TableRow(children: [
-                Text("COURSE", textScaleFactor: 1.5),
-                Text("", textScaleFactor: 1.5),
+                Text("COURSE", textScaleFactor: 1.0),
+                Text("", textScaleFactor: 1.0),
 
               ]),
               TableRow(children: [
@@ -129,8 +130,8 @@ class _InputPageState extends State<InputPage> {
 
               ]),
               TableRow(children: [
-                Text("CONTACT", textScaleFactor: 1.5),
-                Text("", textScaleFactor: 1.5),
+                Text("CONTACT", textScaleFactor: 1.0),
+                Text("", textScaleFactor: 1.0),
 
               ]),
               TableRow(children: [
@@ -142,8 +143,8 @@ class _InputPageState extends State<InputPage> {
 
               ]),
               TableRow(children: [
-                Text("CONTACT", textScaleFactor: 1.5),
-                Text("", textScaleFactor: 1.5),
+                Text("CONTACT", textScaleFactor: 1.0),
+                Text("", textScaleFactor: 1.0),
 
               ]),
               TableRow(children: [
@@ -158,6 +159,7 @@ class _InputPageState extends State<InputPage> {
           ),
         ),
       ]),
+
       floatingActionButton: Column(
 
         mainAxisAlignment: MainAxisAlignment.end,
@@ -177,6 +179,7 @@ class _InputPageState extends State<InputPage> {
           ),
         ],
       ),
+
     );
   }
 }
@@ -196,7 +199,9 @@ class SecondRoute extends StatelessWidget{
         appBar: AppBar(
           title: Text("UPDATE PROFILE PAGE"),
         ),
-        body: Center(
+        body:
+
+        SingleChildScrollView( child:  Center(
           child: Column(
             children: <Widget>[
 
@@ -292,7 +297,9 @@ class SecondRoute extends StatelessWidget{
 
             ],
           ),
-        ));
+        )
+    ),
+    );
   }
 
 
