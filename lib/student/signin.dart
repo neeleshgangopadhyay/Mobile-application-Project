@@ -1,21 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:proctor/pages/home_page.dart';
-import 'forgetpassword.dart';
 import 'package:proctor/service/auth.dart';
-import 'package:proctor/pages/forgetpassword.dart';
+import 'package:proctor/student/forgetpassword.dart';
 import 'package:flutter/material.dart';
-import 'package:proctor/student/signin.dart';
+import 'package:proctor/pages/login.dart';
 import 'package:proctor/common/loading.dart';
+import 'package:proctor/student/home_page.dart';
 
-class TeacherLogin extends StatefulWidget {
-
-  TeacherLogin({this.toggleForm});
-  final Function toggleForm ;
+ 
+class StudentLogin extends StatefulWidget {
+  
+  StudentLogin({this.toggleForm}) ;
+  final Function toggleForm;
   @override
-  _TeacherLoginState createState() => _TeacherLoginState();
+  _StudentLoginState createState() => _StudentLoginState();
 }
 
-class _TeacherLoginState extends State<TeacherLogin> {
+class _StudentLoginState extends State<StudentLogin> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -29,7 +29,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return loading ? Loading() : Scaffold
+    return loading? Loading() : Scaffold
       (
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -46,12 +46,12 @@ class _TeacherLoginState extends State<TeacherLogin> {
           ),
         ],
       ),
-
+      
       body: SafeArea
         (
         child: ListView
           (
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          padding: EdgeInsets.symmetric(horizontal: 25.0,vertical:10.0),
           children: <Widget>
           [
             SizedBox(height: 50.0),
@@ -59,22 +59,22 @@ class _TeacherLoginState extends State<TeacherLogin> {
               (
               children: <Widget>
               [
-                Image.asset('assets/bmslogo.jpeg'),
+                Image.asset('images/Login.png'),
                 SizedBox(height: 40.0),
-                Text('Teacher LOGIN'),
+                Text('STUDENT LOGIN'),
               ],
             ),
-
+            
             Form(
-              key: _formKey,
+              key: _formKey, 
               child: Column(
                 children: <Widget> [
                   Container(
                     padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                        validator: (val) => val.isEmpty ? 'Enter email': null ,
-                        controller: nameController,
-                        decoration: InputDecoration(
+                    child: TextFormField(
+                      validator: (val) => val.isEmpty ? 'Enter email': null ,
+                      controller: nameController,
+                      decoration: InputDecoration(
                         hintText: 'Email',
                         fillColor: Colors.blue[50],
                         filled: true,
@@ -119,7 +119,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
                       ),
                   ),
 
-                ButtonBar(
+                  ButtonBar(
                     children: <Widget>[
                       RaisedButton(
                         onPressed: () async {
@@ -193,16 +193,16 @@ class _TeacherLoginState extends State<TeacherLogin> {
                       FlatButton( 
                         onPressed: () {
                         Navigator.push(context, new MaterialPageRoute(
-                          builder: (context) => StudentLogin()),
+                          builder: (context) => TeacherLogin()),
                           );
                         },
                         textColor: Colors.blue,
-                        child: Text('Click here for the student login page'),
+                        child: Text('Click here for the Teacher login page'),
                       ),
                     ],
-                  )  
+                  )
                 ]
-              ),
+              )
             ),
           ],
 
@@ -210,4 +210,5 @@ class _TeacherLoginState extends State<TeacherLogin> {
       ),
     );
   }
-}  
+
+}

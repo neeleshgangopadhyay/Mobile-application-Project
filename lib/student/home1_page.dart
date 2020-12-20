@@ -19,9 +19,6 @@ class _BlogsPageState extends State<BlogsPage> {
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: Column(
-
-      ),
     );
   }
 }

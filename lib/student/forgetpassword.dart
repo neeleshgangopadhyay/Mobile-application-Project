@@ -1,13 +1,13 @@
-import 'studentlogin.dart';
+import 'signin.dart';
 import 'package:flutter/material.dart';
 
-class forgetpassword extends StatefulWidget {
-  forgetpassword({Key key}): super(key: key);
+class ForgetPassword extends StatefulWidget {
+  ForgetPassword({Key key}): super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
-class _LoginPageState extends State<forgetpassword> {
+class _LoginPageState extends State<ForgetPassword> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -55,7 +55,7 @@ class _LoginPageState extends State<forgetpassword> {
                   onPressed: () {
                     //forgot password screen
                     Navigator.push(context, new MaterialPageRoute(
-                        builder: (context) => StudentLoginPage()),);
+                        builder: (context) => StudentLogin()),);
                   },
                   textColor: Colors.blue,
                   child: Text('Back to login screen'),

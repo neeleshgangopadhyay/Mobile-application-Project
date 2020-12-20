@@ -1,5 +1,6 @@
 import 'dart:ui';
-
+import 'package:proctor/models/students.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class AccountPage extends StatefulWidget {
@@ -12,6 +13,14 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
+    final users = Provider.of<List<Student>>(context);
+    users.forEach((x) {
+      print('Name $x.name');
+      print('Email $x.email');
+      print('Sem $x.sem');
+      print('Course $x.course');
+      print('Contact $x.contact');
+    });
     return Scaffold(
       backgroundColor: Color(0xff00BCD1),
       body: InputPage(),
