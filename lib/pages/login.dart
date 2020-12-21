@@ -4,12 +4,12 @@ import 'forgetpassword.dart';
 import 'package:proctor/service/auth.dart';
 import 'package:proctor/pages/forgetpassword.dart';
 import 'package:flutter/material.dart';
-import 'package:proctor/student/signin.dart';
 import 'package:proctor/common/loading.dart';
 
 class TeacherLogin extends StatefulWidget {
 
-  TeacherLogin({this.toggleForm});
+  TeacherLogin({this.toggleForm, this.redirect});
+  final Function redirect ;
   final Function toggleForm ;
   @override
   _TeacherLoginState createState() => _TeacherLoginState();
@@ -51,10 +51,9 @@ class _TeacherLoginState extends State<TeacherLogin> {
         (
         child: ListView
           (
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          padding: EdgeInsets.all(5.0),
           children: <Widget>
           [
-            SizedBox(height: 50.0),
             Column
               (
               children: <Widget>
@@ -70,7 +69,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
               child: Column(
                 children: <Widget> [
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
                       child: TextFormField(
                         validator: (val) => val.isEmpty ? 'Enter email': null ,
                         controller: nameController,
@@ -89,8 +88,9 @@ class _TeacherLoginState extends State<TeacherLogin> {
                       }
                     ),
                   ),
+
                   Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
                     child: TextFormField(
                       validator: (val) => val.length < 6 ? 'Enter more than 6 characters': null ,
                       obscureText: true,
@@ -115,94 +115,123 @@ class _TeacherLoginState extends State<TeacherLogin> {
                     height:10.0,
                     child: Text( 
                       '$regerror',
-                        style:TextStyle(color: Colors.red, fontSize: 10),
+                        style:TextStyle(color: Colors.red, fontSize: 30),
                       ),
+                  ),
+
+                  Container (
+                    height: 50,
+                    width: 500,
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child :RaisedButton(
+                        textColor: Colors.white,
+                      color: Colors.blue,
+                      child: Text('Email Login'),
+                      onPressed: () async {
+                        if(_formKey.currentState.validate()){
+                          setState(() =>  loading = true);
+                          print('email $email password $password');
+                          dynamic result = await _auth.signinEmailpassword(email, password);
+                          if (result == null){
+                            setState(() {
+                              loading = false ;
+                              regerror =  'Something Went Wrong' ;
+                            } );
+                          }   
+                        }
+                      },
+                    ),
+                  ),
+
+                  Container (
+                    height: 50,
+                    width: 500,
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                    child :RaisedButton(
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      child: Text(' Continue without logging in.'),
+                      onPressed: () async {
+                        dynamic result = await _auth.signInAnonymous();
+                        if(result==null){
+                          print('error signing in');
+                        }
+                        else{
+                          print('signed in $result');
+                          print(result.displayName);
+                        } 
+                      },
+                    ),
                   ),
 
                 ButtonBar(
                     children: <Widget>[
-                      RaisedButton(
-                        onPressed: () async {
-                          //forgot password screen
-                          Navigator.push(context, new MaterialPageRoute(
-                            builder: (context) => ForgetPassword()),
-                            );//push context
-                        },
-                        textColor: Colors.blue,
-                        child: Text('Forgot Password?'),
-                        ),
-                      Container (
+                      
+                      Container(
                         height: 50,
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child :RaisedButton(
-                          textColor: Colors.white,
-                          color: Colors.blue,
-                          child: Text(' Continue without logging in.'),
+                        width: 500,
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: RaisedButton(
                           onPressed: () async {
-                            dynamic result = await _auth.signInAnonymous();
+                            //forgot password screen
+                            Navigator.push(context, new MaterialPageRoute(
+                              builder: (context) => ForgetPassword()),
+                              );//push context
+                          },
+                          color: Colors.blue[900],
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              color: Colors.white,
+                              ),
+                            ),
+                        ),
+                      ),
+
+                      Container(
+                        height: 50,
+                        width: 500,
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: RaisedButton(
+                          textColor: Colors.white,
+                          color: Colors.blue[900],
+                          child: Text(' Google Login'),
+                          onPressed: () async {
+                            dynamic result = await _auth.signInGoogle(credential);
                             if(result==null){
                             print('error signing in');
                             }
                             else{
-                              print('signed in $result');
-                              print(result.displayName);
+                            print('signed in $result');
+                            print(result.uid);
+                            Navigator.push(context, new MaterialPageRoute(
+                            builder: (context) => HomePage()),
+                            );//push context
                             } 
                           },
                         ),
                       ),
-                       Container (
+
+                      Container(
                         height: 50,
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child :RaisedButton(
-                          textColor: Colors.white,
-                          color: Colors.blue,
-                          child: Text('Email Login'),
-                          onPressed: () async {
-                            if(_formKey.currentState.validate()){
-                              setState(() =>  loading = true);
-                              print('email $email password $password');
-                              dynamic result = await _auth.signinEmailpassword(email, password);
-                              if (result == null){
-                                setState(() {
-                                  loading = false ;
-                                  regerror =  'Something Went Wrong' ;
-                                } );
-                              }   
-                            }
+                        width: 500,
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: FlatButton( 
+                          onPressed: () {
+                            widget.redirect('student');
                           },
+                          textColor: Colors.white,
+                          color: Colors.blue[900],
+                          child: Text('Are you a Student ?'),
                         ),
                       ),
-                      RaisedButton(
-                        textColor: Colors.white,
-                        color: Colors.blue,
-                        child: Text(' Google Login'),
-                        onPressed: () async {
-                          dynamic result = await _auth.signInGoogle(credential);
-                          if(result==null){
-                          print('error signing in');
-                          }
-                          else{
-                          print('signed in $result');
-                          print(result.uid);
-                          Navigator.push(context, new MaterialPageRoute(
-                          builder: (context) => HomePage()),
-                          );//push context
-                          } 
-                        },
-                      ),
-                      FlatButton( 
-                        onPressed: () {
-                        Navigator.push(context, new MaterialPageRoute(
-                          builder: (context) => StudentLogin()),
-                          );
-                        },
-                        textColor: Colors.blue,
-                        child: Text('Click here for the student login page'),
-                      ),
+
                     ],
                   )  
+
                 ]
               ),
+
             ),
           ],
 

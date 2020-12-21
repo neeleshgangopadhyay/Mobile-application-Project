@@ -1,14 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proctor/pages/home_page.dart';
-import 'package:proctor/pages/login.dart';
 import 'package:proctor/service/auth.dart';
-import 'package:proctor/student/forgetpassword.dart';
 import '../common/loading.dart';
 
 class RegisterTeacher extends StatefulWidget {
   final Function toggleForm;
-  RegisterTeacher({this.toggleForm});
+  RegisterTeacher({this.toggleForm, usertype, this.redirect});
+  final Function redirect ;
 
   @override
   _RegisterTeacherState createState() => _RegisterTeacherState();
@@ -40,7 +39,7 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
-            label: Text('Sign Up'),
+            label: Text('Sign In'),
             onPressed: (){
               widget.toggleForm();
             },
@@ -52,10 +51,9 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
         (
         child: ListView
           (
-          padding: EdgeInsets.symmetric(horizontal: 25.0,vertical:10.0),
+          padding: EdgeInsets.all(5.0),
           children: <Widget>
           [
-            SizedBox(height: 50.0),
             Column
               (
               children: <Widget>
@@ -71,7 +69,7 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
               child: Column(
                 children: <Widget> [
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
                     child: TextFormField(
                       controller: nameController,
                       validator: (val) => val.isEmpty ? 'Enter email': null ,
@@ -90,8 +88,10 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
                       }
                     ),
                   ),
+
+
                   Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
                     child: TextFormField(
                       obscureText: true,
                       validator: (val) => val.length < 6 ? 'Enter more than 6 characters': null ,
@@ -111,6 +111,7 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
                       }
                     ),
                   ),
+
                   SizedBox(
                     height:10.0,
                     child: Text( 
@@ -118,70 +119,75 @@ class _RegisterTeacherState extends State<RegisterTeacher> {
                         style:TextStyle(color: Colors.red, fontSize: 10),
                       ),
                   ),
+
+                  Container (
+                    height: 50,
+                    width:  500,
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child :RaisedButton(
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      child: Text('Register with Email'),
+                      onPressed: () async {
+                        if(_formKey.currentState.validate()){
+                          setState(() =>  loading = true);
+                          print('email $email password $password');
+                          dynamic result = await _auth.registeremailpassword('',email, password,0,'','');
+                          if (result == null){
+                            setState(() {
+                              loading = false ;
+                              regerror =  'Something Went Wrong' ;
+                            } );
+                          }    
+                        }
+                      },
+                   ),
+                  ),
+
                   ButtonBar(
                     children: <Widget>[
-                      RaisedButton(
-                        onPressed: () async {
-                          //forgot password screen
-                          Navigator.push(context, new MaterialPageRoute(
-                            builder: (context) => ForgetPassword()),
-                            );//push context
-                        },
-                        textColor: Colors.blue,
-                        child: Text('Forgot Password?'),
-                        ),
-                       Container (
+                     
+                      Container(
                         height: 50,
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child :RaisedButton(
+                        width: 500,
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: RaisedButton(
                           textColor: Colors.white,
-                          color: Colors.blue,
-                          child: Text('Email Login'),
+                          color: Colors.blue[900],
+                          child: Text(' Sign Up with Google'),
                           onPressed: () async {
-                          if(_formKey.currentState.validate()){
-                            setState(() =>  loading = true);
-                            print('email $email password $password');
-                            dynamic result = await _auth.registeremailpassword('',email, password,0,'','');
-                            if (result == null){
-                              setState(() {
-                                  loading = false ;
-                                  regerror =  'Something Went Wrong' ;
-                                } );
-                            }    
-                           }
+                            dynamic result = await _auth.signInGoogle(credential);
+                            if(result==null){
+                            print('error Registering');
+                            }
+                            else{
+                            print('Registered $result');
+                            print(result.uid);
+                            Navigator.push(context, new MaterialPageRoute(
+                            builder: (context) => HomePage()),
+                            );//push context
+                            } 
                           },
                         ),
                       ),
-                     
-                      RaisedButton(
-                        textColor: Colors.white,
-                        color: Colors.blue,
-                        child: Text(' Google Login'),
-                        onPressed: () async {
-                          dynamic result = await _auth.signInGoogle(credential);
-                          if(result==null){
-                          print('error signing in');
-                          }
-                          else{
-                          print('signed in $result');
-                          print(result.uid);
-                          Navigator.push(context, new MaterialPageRoute(
-                          builder: (context) => HomePage()),
-                          );//push context
-                          } 
-                        },
+
+                      Container(
+                        height: 50,
+                        width: 500,
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: FlatButton( 
+                          onPressed: () {
+                            widget.redirect('student');
+                          },
+                          textColor: Colors.white,
+                          color: Colors.blue[900],
+                          child: Text('Are you a Student ?'),
+                        ),
                       ),
-                      FlatButton( 
-                        onPressed: () {
-                        Navigator.push(context, new MaterialPageRoute(
-                          builder: (context) => TeacherLogin()),
-                          );
-                        },
-                        textColor: Colors.blue,
-                        child: Text('Click here for the teacher login page'),
-                      ),
+
                     ],
                   )
+
                 ]
               )
             ),

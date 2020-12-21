@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proctor/models/students.dart';
 import 'package:proctor/service/auth.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     _pageController.jumpToPage(selectedIndex);
   }
   final AuthService _auth = AuthService();
-  
+  final dbuser = FirestoreService();
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Student>>.value(
@@ -47,7 +48,15 @@ class _HomePageState extends State<HomePage> {
                   await _auth.signout();
                 }, 
                 label :Text('logout'),
-              )
+              ),
+              FlatButton.icon(
+                icon: Icon(Icons.exit_to_app_rounded),
+                onPressed: () async {
+                  dbuser.getusertype(FirebaseAuth.instance.currentUser.uid);
+                }, 
+                label :Text('usesrtype'),
+              ),
+              
             ],
           ),
           body: PageView(

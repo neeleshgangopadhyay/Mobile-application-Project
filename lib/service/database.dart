@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proctor/models/students.dart';
 
@@ -5,7 +6,7 @@ class FirestoreService {
 
   final String uid ;
   FirestoreService ({this.uid});
-  final CollectionReference usercollection = FirebaseFirestore.instance.collection('users') ;
+  final CollectionReference usercollection = FirebaseFirestore.instance.collection('users');
   final CollectionReference noticecollection = FirebaseFirestore.instance.collection('notices');
 
   //obtains user data
@@ -19,6 +20,19 @@ class FirestoreService {
     });
   }
 
+ Future<String> getusertype(uid) async {
+  DocumentSnapshot user = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+  for (MapEntry x in user.data().entries){
+    if(x.key == "type" )
+    {
+      return x.value ;
+    }
+    
+
+  }
+  return 'null' ;
+}
+  
   List<Student> _userinfofromsnapshot(QuerySnapshot snapshot)
   {
     return snapshot.docs.map((doc){

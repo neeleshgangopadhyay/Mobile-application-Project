@@ -13,8 +13,7 @@ class AuthService {
 
   //auth change user stream
   Stream<AppUsers> get user {
-    return _auth.authStateChanges()
-    .map((User user) => _toFirebaseuser(user));
+    return _auth.authStateChanges().map((User user) => _toFirebaseuser(user));
   }
 
   // sign in anon
@@ -34,10 +33,12 @@ class AuthService {
     try{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User user= result.user;
-
+      await user.sendEmailVerification();
       //creates a document in db.
       await FirestoreService(uid: user.uid).updateUserData(email, name , sem, course , contact);
       return _toFirebaseuser(user);
+
+
     }
     catch(e){
       print(e.toString());

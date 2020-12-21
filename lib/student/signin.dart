@@ -2,15 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proctor/service/auth.dart';
 import 'package:proctor/student/forgetpassword.dart';
 import 'package:flutter/material.dart';
-import 'package:proctor/pages/login.dart';
 import 'package:proctor/common/loading.dart';
 import 'package:proctor/student/home_page.dart';
 
  
 class StudentLogin extends StatefulWidget {
-  
-  StudentLogin({this.toggleForm}) ;
+
+  StudentLogin({this.toggleForm, this.redirect}) ;
   final Function toggleForm;
+  final Function redirect ;
   @override
   _StudentLoginState createState() => _StudentLoginState();
 }
@@ -51,10 +51,9 @@ class _StudentLoginState extends State<StudentLogin> {
         (
         child: ListView
           (
-          padding: EdgeInsets.symmetric(horizontal: 25.0,vertical:10.0),
+          padding: EdgeInsets.all(5.0),
           children: <Widget>
           [
-            SizedBox(height: 50.0),
             Column
               (
               children: <Widget>
@@ -70,7 +69,7 @@ class _StudentLoginState extends State<StudentLogin> {
               child: Column(
                 children: <Widget> [
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
                     child: TextFormField(
                       validator: (val) => val.isEmpty ? 'Enter email': null ,
                       controller: nameController,
@@ -89,8 +88,9 @@ class _StudentLoginState extends State<StudentLogin> {
                       }
                     ),
                   ),
+
                   Container(
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
                     child: TextFormField(
                       validator: (val) => val.length < 6 ? 'Enter more than 6 characters': null ,
                       obscureText: true,
@@ -115,94 +115,123 @@ class _StudentLoginState extends State<StudentLogin> {
                     height:10.0,
                     child: Text( 
                       '$regerror',
-                        style:TextStyle(color: Colors.red, fontSize: 10),
+                        style:TextStyle(color: Colors.red, fontSize: 30),
                       ),
+                  ),
+                  
+                  Container (
+                    height: 50,
+                    width: 500,
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child :RaisedButton(
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      child: Text('Email Login'),
+                      onPressed: () async {
+                        if(_formKey.currentState.validate()){
+                          setState(() =>  loading = true);
+                          print('email $email password $password');
+                          dynamic result = await _auth.signinEmailpassword(email, password);
+                          if (result == null){
+                            setState(() {
+                              loading = false ;
+                              regerror =  'Something Went Wrong' ;
+                            } );
+                          }   
+                        }
+                      },
+                    ),
+                  ),
+
+                  Container (
+                    height: 50,
+                    width:  500,
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                    child :RaisedButton(
+                      textColor: Colors.white,
+                      color: Colors.blue,
+                      child: Text(' Continue without logging in.'),
+                      onPressed: () async {
+                        dynamic result = await _auth.signInAnonymous();
+                        if(result==null){
+                          print('error signing in');
+                        }
+                        else{
+                          print('signed in $result');
+                          print(result.displayName);
+                        } 
+                      },
+                    ),
                   ),
 
                   ButtonBar(
                     children: <Widget>[
-                      RaisedButton(
-                        onPressed: () async {
-                          //forgot password screen
-                          Navigator.push(context, new MaterialPageRoute(
-                            builder: (context) => ForgetPassword()),
-                            );//push context
-                        },
-                        textColor: Colors.blue,
-                        child: Text('Forgot Password?'),
-                        ),
-                      Container (
+
+                      Container(
                         height: 50,
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child :RaisedButton(
-                          textColor: Colors.white,
-                          color: Colors.blue,
-                          child: Text(' Continue without logging in.'),
+                        width: 500,
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: RaisedButton(
                           onPressed: () async {
-                            dynamic result = await _auth.signInAnonymous();
+                            //forgot password screen
+                            Navigator.push(context, new MaterialPageRoute(
+                              builder: (context) => ForgetPassword()),
+                              );//push context
+                          },
+                          color: Colors.blue[900],
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              color: Colors.white,
+                              ),
+                            ),
+                        ),
+                      ),
+                      
+                      Container(
+                        height: 50,
+                        width: 500,
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: RaisedButton(
+                          textColor: Colors.white,
+                          color: Colors.blue[900],
+                          child: Text(' Google Login'),
+                          onPressed: () async {
+                            dynamic result = await _auth.signInGoogle(credential);
                             if(result==null){
                             print('error signing in');
                             }
                             else{
-                              print('signed in $result');
-                              print(result.displayName);
+                            print('signed in $result');
+                            print(result.uid);
+                            Navigator.push(context, new MaterialPageRoute(
+                            builder: (context) => HomePage()),
+                            );//push context
                             } 
                           },
                         ),
                       ),
-                       Container (
+
+                      Container(
                         height: 50,
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child :RaisedButton(
-                          textColor: Colors.white,
-                          color: Colors.blue,
-                          child: Text('Email Login'),
-                          onPressed: () async {
-                            if(_formKey.currentState.validate()){
-                              setState(() =>  loading = true);
-                              print('email $email password $password');
-                              dynamic result = await _auth.signinEmailpassword(email, password);
-                              if (result == null){
-                                setState(() {
-                                  loading = false ;
-                                  regerror =  'Something Went Wrong' ;
-                                } );
-                              }   
-                            }
+                        width: 500,
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: FlatButton( 
+                          onPressed: () {
+                            widget.redirect('teacher');
                           },
+                          textColor: Colors.white,
+                          color: Colors.blue[900],
+                          child: Text('Are you a Teacher ?'),
                         ),
                       ),
-                      RaisedButton(
-                        textColor: Colors.white,
-                        color: Colors.blue,
-                        child: Text(' Google Login'),
-                        onPressed: () async {
-                          dynamic result = await _auth.signInGoogle(credential);
-                          if(result==null){
-                          print('error signing in');
-                          }
-                          else{
-                          print('signed in $result');
-                          print(result.uid);
-                          Navigator.push(context, new MaterialPageRoute(
-                          builder: (context) => HomePage()),
-                          );//push context
-                          } 
-                        },
-                      ),
-                      FlatButton( 
-                        onPressed: () {
-                        Navigator.push(context, new MaterialPageRoute(
-                          builder: (context) => TeacherLogin()),
-                          );
-                        },
-                        textColor: Colors.blue,
-                        child: Text('Click here for the Teacher login page'),
-                      ),
+
                     ],
                   )
+
                 ]
               )
+
             ),
           ],
 

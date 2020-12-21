@@ -17,7 +17,7 @@ class _BlogsPageState extends State<BlogsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text('Student Home'),
       ),
     );
   }
