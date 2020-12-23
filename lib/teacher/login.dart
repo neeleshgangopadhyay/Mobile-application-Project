@@ -1,20 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:proctor/teacher/home_page.dart';
 import 'package:proctor/service/auth.dart';
 import 'package:proctor/common/resetpassword.dart';
 import 'package:flutter/material.dart';
 import 'package:proctor/common/loading.dart';
-import 'package:proctor/student/home_page.dart';
 
- 
-class StudentLogin extends StatefulWidget {
-  StudentLogin({this.toggleForm, this.redirect}) ;
-  final Function toggleForm;
+class TeacherLogin extends StatefulWidget {
+
+  TeacherLogin({this.toggleForm, this.redirect});
   final Function redirect ;
+  final Function toggleForm ;
   @override
-  _StudentLoginState createState() => _StudentLoginState();
+  _TeacherLoginState createState() => _TeacherLoginState();
 }
 
-class _StudentLoginState extends State<StudentLogin> {
+class _TeacherLoginState extends State<TeacherLogin> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -28,7 +28,7 @@ class _StudentLoginState extends State<StudentLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return loading? Loading() : Scaffold
+    return loading ? Loading() : Scaffold
       (
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -45,7 +45,7 @@ class _StudentLoginState extends State<StudentLogin> {
           ),
         ],
       ),
-      
+
       body: SafeArea
         (
         child: ListView
@@ -53,22 +53,22 @@ class _StudentLoginState extends State<StudentLogin> {
           padding: EdgeInsets.all(5.0),
           children: <Widget>
           [
-            Container (
-              child:
-                Image.asset('images/slogin.jpg'),
+            Container(
+              child: 
+                Image.asset('images/tlogin.jpg')
             ),
-            
+
             Form(
-              key: _formKey, 
+              key: _formKey,
               child: Column(
                 children: <Widget> [
-                  Text('STUDENT LOGIN'),
+                  Text('Teacher LOGIN'),
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
-                    child: TextFormField(
-                      validator: (val) => val.isEmpty ? 'Enter email': null ,
-                      controller: nameController,
-                      decoration: InputDecoration(
+                      child: TextFormField(
+                        validator: (val) => val.isEmpty ? 'Enter email': null ,
+                        controller: nameController,
+                        decoration: InputDecoration(
                         hintText: 'Email',
                         fillColor: Colors.blue[50],
                         filled: true,
@@ -107,19 +107,19 @@ class _StudentLoginState extends State<StudentLogin> {
                   ),
 
                   SizedBox(
-                    height:10.0,
+                    height:30.0,
                     child: Text( 
                       '$regerror',
-                        style:TextStyle(color: Colors.red, fontSize: 30),
+                        style:TextStyle(color: Colors.red, fontSize: 15),
                       ),
                   ),
-                  
+
                   Container (
                     height: 50,
                     width: 500,
                     padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                     child :RaisedButton(
-                      textColor: Colors.white,
+                        textColor: Colors.white,
                       color: Colors.blue,
                       child: Text('Email Login'),
                       onPressed: () async {
@@ -140,7 +140,7 @@ class _StudentLoginState extends State<StudentLogin> {
 
                   Container (
                     height: 50,
-                    width:  500,
+                    width: 500,
                     padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
                     child :RaisedButton(
                       textColor: Colors.white,
@@ -159,9 +159,9 @@ class _StudentLoginState extends State<StudentLogin> {
                     ),
                   ),
 
-                  ButtonBar(
+                ButtonBar(
                     children: <Widget>[
-
+                      
                       Container(
                         height: 50,
                         width: 500,
@@ -182,7 +182,7 @@ class _StudentLoginState extends State<StudentLogin> {
                             ),
                         ),
                       ),
-                      
+
                       Container(
                         height: 50,
                         width: 500,
@@ -200,7 +200,7 @@ class _StudentLoginState extends State<StudentLogin> {
                             print('signed in $result');
                             print(result.uid);
                             Navigator.push(context, new MaterialPageRoute(
-                            builder: (context) => StudentHome()),
+                            builder: (context) => TeacherHome()),
                             );//push context
                             } 
                           },
@@ -213,19 +213,19 @@ class _StudentLoginState extends State<StudentLogin> {
                         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                         child: FlatButton( 
                           onPressed: () {
-                            widget.redirect('teacher');
+                            widget.redirect('student');
                           },
                           textColor: Colors.white,
                           color: Colors.blue[900],
-                          child: Text('Are you a Teacher ?'),
+                          child: Text('Are you a Student ?'),
                         ),
                       ),
 
                     ],
-                  )
+                  )  
 
                 ]
-              )
+              ),
 
             ),
           ],
@@ -234,5 +234,4 @@ class _StudentLoginState extends State<StudentLogin> {
       ),
     );
   }
-
-}
+}  

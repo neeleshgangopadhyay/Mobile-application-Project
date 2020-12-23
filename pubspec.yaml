@@ -54,6 +54,16 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+  assets:
+    - images/slogin.jpg
+    - images/sregister.jpg
+    - images/tlogin.jpg
+    - images/tregister.jpg
+    - images/google.jpg
+    - images/resetp.png
+    - images/teacher.png
+    - images/student.png
+    - images/admin.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

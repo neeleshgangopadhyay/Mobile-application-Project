@@ -1,21 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proctor/models/students.dart';
 import 'package:proctor/service/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:proctor/service/database.dart';
 import 'account_page.dart';
-import 'home1_page.dart';
+import 'blogs_page.dart';
 import 'course_page.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key}): super(key: key);
+class StudentHome extends StatefulWidget {
+  StudentHome({Key key}): super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _StudentHomeState createState() => _StudentHomeState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _StudentHomeState extends State<StudentHome> {
   PageController _pageController = PageController();
   List<Widget> _screens = [
     BlogsPage(), CoursePage(), AccountPage(),
@@ -31,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   }
   final AuthService _auth = AuthService();
   final dbuser = FirestoreService();
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<Student>>.value(
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
            backgroundColor: Colors.white,
           appBar: AppBar(
-            title : Text('Proctor'),
+            title : Text('Proctor: {$_auth.currentuser()} '),
             backgroundColor: Colors.blue,
             elevation : 0.0 ,
             actions: <Widget>[
@@ -46,15 +46,9 @@ class _HomePageState extends State<HomePage> {
                 icon: Icon(Icons.exit_to_app_rounded),
                 onPressed: () async {
                   await _auth.signout();
+                  
                 }, 
                 label :Text('logout'),
-              ),
-              FlatButton.icon(
-                icon: Icon(Icons.exit_to_app_rounded),
-                onPressed: () async {
-                  dbuser.getusertype(FirebaseAuth.instance.currentUser.uid);
-                }, 
-                label :Text('usesrtype'),
               ),
               
             ],

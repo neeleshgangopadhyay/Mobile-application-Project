@@ -3,59 +3,50 @@ import 'package:proctor/common/authenticate.dart';
 import 'package:flutter/material.dart';
 import 'package:proctor/models/users.dart';
 import 'package:proctor/student/home_page.dart';
+import 'package:proctor/teacher/home_page.dart';
 import 'package:provider/provider.dart';
 
-class Wrapper extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    
-    final user = Provider.of<AppUsers>(context);
-    //provides app user to pages.
-   
-    if (user==null)
-    {
-      
-      return Authenticate();
-    }
-    else
-    {
-      return HomePage();
-    }
 
-    // return either the Home or Authenticate widget
-    
-    
-  }
+class WrapUser extends StatefulWidget {
+
+  @override
+  _WrapUserState createState() => _WrapUserState();
 }
 
-/*
-return Container(
-      color: Colors.blueGrey[50],
-      child: ButtonBar(
-        children: <Widget>[
-          ElevatedButton(
-            onPressed: (){
-              String usertype = "admin";
-              redirect(usertype);
-            },
-            child: Text('Admin')
-          ),
-          ElevatedButton(
-            onPressed: (){
-              String usertype = "teacher";
-              redirect(usertype);
-            },
-            child: Text("Teacher")
-          ),
-          ElevatedButton(
-            onPressed: (){
-              String usertype = "student";
-              redirect(usertype);
-            },
-            child: Text("Student")
-          ),
-        ],
+class _WrapUserState extends State<WrapUser> {
+  
+  String usertype = "unknown";// add database usertype
 
-      ),
+  @override
+  Widget build(BuildContext context) {
+    final user = Provider.of<AppUsers>(context);
 
-    );*/
+      if (user==null)
+      { 
+        print('here in wrapper auth');
+        return Authenticate();
+      }
+      else
+      {
+        print('here in wrapper ');
+        if(usertype == "teacher")
+        {
+          
+          print('here in wrapper t');
+          return TeacherHome();
+        }
+        else if(usertype == "admin"){
+          print('here in wrapper a');
+           return Container(
+            color: Colors.orange,
+            child: Text('This is admin Home Page')
+           );
+        }
+        else{
+
+          print('here in wrapper s');
+          return StudentHome();
+        }
+      }
+  }
+}

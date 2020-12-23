@@ -1,31 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:proctor/teacher/home_page.dart';
 import 'package:proctor/service/auth.dart';
-import 'package:proctor/student/home_page.dart';
 import '../common/loading.dart';
 
-class RegisterStudent extends StatefulWidget {
+class RegisterTeacher extends StatefulWidget {
   final Function toggleForm;
-  RegisterStudent({this.toggleForm, this.redirect});
+  RegisterTeacher({this.toggleForm, usertype, this.redirect});
   final Function redirect ;
 
   @override
-  _RegisterStudentState createState() => _RegisterStudentState();
+  _RegisterTeacherState createState() => _RegisterTeacherState();
 }
 
-class _RegisterStudentState extends State<RegisterStudent> {
+class _RegisterTeacherState extends State<RegisterTeacher> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
 
 
   final AuthService _auth = AuthService();
-  String name = "";
   String email = "";
   String password = "";
-  int sem = 1 ;
-  String course = "";
-  String contact = "";
   AuthCredential credential ;
   String regerror = "";
   bool loading = false ;
@@ -39,7 +35,7 @@ class _RegisterStudentState extends State<RegisterStudent> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         elevation: 0.0,
-        title: Text('Student Sign Up'),
+        title: Text('Teacher Sign Up'),
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
@@ -58,16 +54,16 @@ class _RegisterStudentState extends State<RegisterStudent> {
           padding: EdgeInsets.all(5.0),
           children: <Widget>
           [
-            Container  (
-              child:
-                Image.asset('images/sregister.jpg'),
+            Container (
+              child: 
+                Image.asset('images/tregister.jpg'),
             ),
             
             Form( 
               key: _formKey,
               child: Column(
                 children: <Widget> [
-                  Text('STUDENT Sign Up'),
+                  Text('Teacher Sign Up'),
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
                     child: TextFormField(
@@ -88,6 +84,8 @@ class _RegisterStudentState extends State<RegisterStudent> {
                       }
                     ),
                   ),
+
+
                   Container(
                     padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
                     child: TextFormField(
@@ -118,7 +116,7 @@ class _RegisterStudentState extends State<RegisterStudent> {
                       ),
                   ),
 
-                   Container (
+                  Container (
                     height: 50,
                     width:  500,
                     padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -128,23 +126,23 @@ class _RegisterStudentState extends State<RegisterStudent> {
                       child: Text('Register with Email'),
                       onPressed: () async {
                         if(_formKey.currentState.validate()){
-                            setState(() =>  loading = true);
-                            print('email $email password $password');
-                            dynamic result = await _auth.registeremailpassword(name, email, password, sem, course, contact);
-                            if (result == null){
-                              setState(() {
-                                loading = false ;
-                                regerror =  'Something Went Wrong' ;
-                              } );
-                            }    
-                          }
-                        },
-                      ),
-                    ),
+                          setState(() =>  loading = true);
+                          print('email $email password $password');
+                          dynamic result = await _auth.registeremailpassword('',email, password,0,'','');
+                          if (result == null){
+                            setState(() {
+                              loading = false ;
+                              regerror =  'Something Went Wrong' ;
+                            } );
+                          }    
+                        }
+                      },
+                   ),
+                  ),
 
                   ButtonBar(
                     children: <Widget>[
-                      
+                     
                       Container(
                         height: 50,
                         width: 500,
@@ -162,7 +160,7 @@ class _RegisterStudentState extends State<RegisterStudent> {
                             print('Registered $result');
                             print(result.uid);
                             Navigator.push(context, new MaterialPageRoute(
-                            builder: (context) => StudentHome()),
+                            builder: (context) => TeacherHome()),
                             );//push context
                             } 
                           },
@@ -175,11 +173,11 @@ class _RegisterStudentState extends State<RegisterStudent> {
                         padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                         child: FlatButton( 
                           onPressed: () {
-                            widget.redirect('teacher');
+                            widget.redirect('student');
                           },
                           textColor: Colors.white,
                           color: Colors.blue[900],
-                          child: Text('Are you a Teacher ?'),
+                          child: Text('Are you a Student ?'),
                         ),
                       ),
 

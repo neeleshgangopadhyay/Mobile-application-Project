@@ -20,18 +20,16 @@ class FirestoreService {
     });
   }
 
- Future<String> getusertype(uid) async {
-  DocumentSnapshot user = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-  for (MapEntry x in user.data().entries){
-    if(x.key == "type" )
-    {
-      return x.value ;
+  Future<String> getusertype(uid) async {
+    DocumentSnapshot user = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    for (MapEntry x in user.data().entries){
+      if(x.key == "type" )
+      {
+        return x.value ;
+      }
     }
-    
-
+    return 'null' ;
   }
-  return 'null' ;
-}
   
   List<Student> _userinfofromsnapshot(QuerySnapshot snapshot)
   {

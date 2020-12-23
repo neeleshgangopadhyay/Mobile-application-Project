@@ -1,14 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proctor/models/users.dart';
 import 'package:proctor/service/database.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final GoogleSignIn _googleauth = GoogleSignIn();
+  
   // create appuser model
   AppUsers _toFirebaseuser(User user){
-    return user!= null ? AppUsers( uid: user.uid, displayName: user.displayName, emailVerified: user.emailVerified, email: user.email ) : null ;
+    return user!= null ? AppUsers( uid: user.uid, displayName: user.displayName, emailVerified: user.emailVerified, email: user.email , ) : null ;
   } 
 
   //auth change user stream
@@ -45,13 +47,22 @@ class AuthService {
       return null ;
     }
   }
-
+  
   // sign in with google
-  Future signInGoogle(AuthCredential credential) async {
+  Future signInGoogle() async {
     try {
+      
+      GoogleSignInAccount gsiaccount = await _googleauth.signIn() ;
+      GoogleSignInAuthentication gsiauth = await gsiaccount.authentication;
+      GoogleAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: gsiauth.accessToken,
+        idToken:  gsiauth.idToken,
+      );
+
       UserCredential result = await _auth.signInWithCredential(credential);
       User user = result.user;
-      return user;
+      return _toFirebaseuser(user);
+
     } catch (e) {
       print(e.toString());
       return null;
@@ -73,16 +84,61 @@ class AuthService {
 
 
   // sign out
-Future signout() async {
-  try {
-    return await _auth.signOut();
-  }
-  catch(e){
-    print(e.toString());
-    return null ;
+  Future signout() async {
+    try {
+      return await _auth.signOut();
+    }
+    catch(e){
+      print(e.toString());
+      return null ;
+    }
+
   }
 
-}
+  Future signoutGoogle() async {
+    try{
+      return await _googleauth.signOut();
+    }catch(e){
+      print(e.toString());
+      return null ;
+    }
 
+  }
+
+  // current user
+  User currentuser(){
+  return _auth.currentUser ;  
+  }
+  
+  //delete account
+  Future deleteacc(String email, String password) async {
+    try {
+      EmailAuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+      // Reauthenticate
+      await _auth.currentUser.reauthenticateWithCredential(credential);
+
+      return await _auth.currentUser.delete();
+    } 
+    catch(e){
+      if (e.code == 'requires-recent-login') {
+        print('The user must reauthenticate before this operation can be executed.');
+        print(e.toString());
+        return null ;
+      }
+    }
+  }
+
+  //reset password link
+  Future emailpswd(email) async{
+    try{
+    await _auth.sendPasswordResetEmail(email: email);
+    return 1 ;
+    }
+    catch(e)
+    {
+      print(e.toString());
+      return null ;
+    }
+  }
 
 }
