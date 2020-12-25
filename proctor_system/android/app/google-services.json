@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "555124750777",
+    "project_id": "proctor-management-syste-e0705",
+    "storage_bucket": "proctor-management-syste-e0705.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555124750777:android:fe83a2182f70ff64e4de68",
+        "android_client_info": {
+          "package_name": "com.example.proctor_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555124750777-hq92cme391pdndt366tgrtcc40mh0mg2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZwYWLe28IS_-81U9f7XERZHCA1K9cbXA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555124750777-hq92cme391pdndt366tgrtcc40mh0mg2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
