@@ -1,0 +1,4 @@
+Bro, I got the error.
+in Second Route Widget You have given Provider.of<User>
+but there is no Stream<User> in auth service file
+You have to change Second Route Widget file to Provider.of<UserData>
